@@ -139,7 +139,7 @@ Component({
         bolder = false,
         textDecoration = 'none'
       } = params
-      
+
       this.ctx.beginPath()
       this.ctx.setTextBaseline('top')
       this.ctx.setTextAlign(textAlign)
@@ -147,7 +147,12 @@ Component({
       this.ctx.setFontSize(fontSize)
 
       if (!breakWord) {
-        this.ctx.fillText(content, left, top)
+        if (textAlign === 'center') {
+          let leftM = width / 2 + left
+          this.ctx.fillText(content, leftM, top)
+        } else {
+          this.ctx.fillText(content, left, top)
+        }
         this.drawTextLine(left, top, textDecoration, color, fontSize, content)
       } else {
         let fillText = ''
@@ -169,13 +174,13 @@ Component({
             this.drawTextLine(left, fillTop, textDecoration, color, fontSize, fillText)
             fillText = ''
             fillTop += lineHeight
-            lineNum ++
+            lineNum++
           }
         }
         this.ctx.fillText(fillText, left, fillTop)
         this.drawTextLine(left, fillTop, textDecoration, color, fontSize, fillText)
       }
-      
+
       this.ctx.restore()
 
       if (bolder) {
@@ -184,7 +189,7 @@ Component({
           left: left + 0.3,
           top: top + 0.3,
           bolder: false,
-          textDecoration: 'none' 
+          textDecoration: 'none'
         })
       }
     },
@@ -226,7 +231,7 @@ Component({
         this.ctx.setFillStyle(background)
         this.ctx.fillRect(left, top, width, height)
       }
-      
+
       this.ctx.restore()
     },
     getImageInfo (url) {
@@ -235,6 +240,7 @@ Component({
         if (this.cache[url]) {
           resolve(this.cache[url])
         } else {
+          // eslint-disable-next-line no-useless-escape
           const objExp = new RegExp(/^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/)
           if (objExp.test(url)) {
             wx.getImageInfo({
@@ -276,7 +282,7 @@ Component({
         },
         fail: res => {
 
-        } 
+        }
       }, this)
     }
   }
